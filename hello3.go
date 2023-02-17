@@ -122,7 +122,7 @@ func switchDoing(doing interface{}) string {
 
 }
 
-// 断言
+// 断言测试
 func showAssert() {
 
 	var one = 1
