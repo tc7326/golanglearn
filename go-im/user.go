@@ -14,15 +14,16 @@ type User struct {
 
 }
 
-func newUser(name string, conn net.Conn) *User {
+func newUser(conn net.Conn) *User {
+
+	//获取客户端ip
+	userIp := conn.RemoteAddr().String()
 
 	//user 一个 user对象
-	user := User{name, conn.RemoteAddr().String(), make(chan string), conn}
+	user := User{"user-" + userIp, userIp, make(chan string), conn}
 
 	//新建一个go程 启动监听
-	go func() {
-		user.listenerMsg()
-	}()
+	go user.listenerMsg()
 
 	return &user
 
