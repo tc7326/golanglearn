@@ -26,6 +26,8 @@ func main() {
 	hello2()
 
 	hello3()
+
+	hello4()
 }
 
 // 声明变量 不赋值
