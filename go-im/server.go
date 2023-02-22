@@ -56,8 +56,8 @@ func (server *Server) start() {
 		}
 	}(tcp)
 
-	//监听广播消息
-	go server.listenerMsg()
+	//群发处理
+	go server.groupHandler()
 
 	//处理 tcp连接
 	for {
@@ -80,6 +80,7 @@ func (server *Server) start() {
 
 // 处理tcp连接的逻辑
 func (server *Server) handler(conn net.Conn) {
+
 	fmt.Println("TCP连接建立成功", conn.RemoteAddr())
 
 	//封装 user
@@ -104,15 +105,16 @@ func (server *Server) handler(conn net.Conn) {
 
 			//读取IO错误
 			if err != nil && err != io.EOF {
-				fmt.Println(user.name+"读取异常:", err)
+				fmt.Println("读取异常:", err)
 				return
 			}
 
-			//读取到的消息
-			msg := string(msgBuffer[n])
+			//读取到的消息 这里n前面的:一定不能少 我TM找了一下午
+			msg := string(msgBuffer[:n])
 
-			//用户群发消息
-			user.sendMsg(msg)
+			//用户消息处理
+			fmt.Println("接收到客户端消息:", msg)
+			user.handleMsg(msg)
 
 		}
 
@@ -127,25 +129,25 @@ func (server *Server) handler(conn net.Conn) {
 func (server *Server) broadcast(user *User, msg string) {
 
 	//组装消息
-	readyMsg := "[" + user.addr + "] " + user.name + ":" + msg
+	readyMsg := user.name + ": " + msg
 
 	//将消息给到 channel
 	server.channel <- readyMsg
 
 }
 
-// 服务端监听消息
-func (server *Server) listenerMsg() {
+// 群发handler
+func (server *Server) groupHandler() {
 
 	for {
 
-		//从channel 中取数据
-		readyMsg := <-server.channel
+		//从服务器的channel 中取数据
+		clientMsg := <-server.channel
 
 		//遍历user 将消息交给每个user的channel
 		server.mapLock.Lock()
 		for _, user := range server.onlineMap {
-			user.channel <- readyMsg
+			user.channel <- clientMsg
 		}
 		server.mapLock.Unlock()
 
