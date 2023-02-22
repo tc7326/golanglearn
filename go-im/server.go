@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net"
 	"sync"
 )
@@ -82,15 +83,40 @@ func (server *Server) handler(conn net.Conn) {
 	fmt.Println("TCP连接建立成功", conn.RemoteAddr())
 
 	//封装 user
-	user := newUser(conn)
+	user := newUser(conn, server)
+	//user上线
+	user.online()
 
-	//放入 在线用户列表onlineMap
-	server.mapLock.Lock() //加锁？
-	server.onlineMap[user.name] = user
-	server.mapLock.Unlock() //释放锁？
+	//消息处理
+	go func() {
+		//消息缓存
+		msgBuffer := make([]byte, 2048)
 
-	//广播 用户上线消息
-	server.broadcast(user, "is online!\n")
+		//读取消息
+		for {
+			n, err := conn.Read(msgBuffer)
+
+			//没有消息了
+			if n == 0 {
+				user.offline()
+				return
+			}
+
+			//读取IO错误
+			if err != nil && err != io.EOF {
+				fmt.Println(user.name+"读取异常:", err)
+				return
+			}
+
+			//读取到的消息
+			msg := string(msgBuffer[n])
+
+			//用户群发消息
+			user.sendMsg(msg)
+
+		}
+
+	}()
 
 	//阻塞
 	select {}
