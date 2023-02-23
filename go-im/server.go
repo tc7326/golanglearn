@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"sync"
+	"time"
 )
 
 // Server 定义一个 服务器结构体
@@ -88,6 +89,9 @@ func (server *Server) handler(conn net.Conn) {
 	//user上线
 	user.online()
 
+	//tcp活跃
+	tcpLive := make(chan bool)
+
 	//消息处理
 	go func() {
 		//消息缓存
@@ -116,12 +120,36 @@ func (server *Server) handler(conn net.Conn) {
 			fmt.Println("接收到客户端消息:", msg)
 			user.handleMsg(msg)
 
+			//每收到消息就标记活跃
+			tcpLive <- true
+
 		}
 
 	}()
 
 	//阻塞
-	select {}
+	for {
+		select {
+		case live := <-tcpLive:
+			fmt.Println("用户活跃:", live)
+
+		case <-time.After(60 * time.Second):
+			fmt.Println(user.name, " 长时间无响应")
+
+			//超时 下线
+			user.offline()
+
+			//关闭tcp
+			conn.Close()
+
+			//关闭chan
+			close(user.channel)
+
+			fmt.Println(user.name, " 资源已释放")
+			return
+
+		}
+	}
 
 }
 

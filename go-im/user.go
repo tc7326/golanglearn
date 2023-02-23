@@ -41,7 +41,12 @@ func (user *User) listenerMsg() {
 
 	for {
 		//从chan里取消息
-		msg := <-user.channel
+		msg, ok := <-user.channel
+		if ok == false {
+			//chan 已经close 则需要结束
+			fmt.Println("user chan return")
+			return
+		}
 
 		//将去到的消息重新回复过去
 		user.sendMsg(msg)
@@ -77,10 +82,7 @@ func (user *User) handleMsg(msg string) {
 		//遍历用户列表
 		user.server.mapLock.Lock()
 		for _, u := range user.server.onlineMap {
-
-			onlineMsg := u.name + " is online..."
-			user.sendMsg(onlineMsg)
-
+			user.sendMsg(u.name + " is online...")
 		}
 		user.server.mapLock.Unlock()
 
@@ -108,6 +110,29 @@ func (user *User) handleMsg(msg string) {
 			user.sendMsg("rename success!!!")
 
 		}
+	} else if len(msg) > 3 && msg[:3] == "to:" {
+
+		//私聊
+		toName := strings.Split(msg, ":")[1]
+		if toName == "" {
+			user.sendMsg("err format!!! type 'to username message'")
+			return
+		}
+		toUser, ok := user.server.onlineMap[toName]
+		if !ok {
+			user.sendMsg("this user is offline!!!")
+			return
+		}
+
+		toMsg := strings.Split(msg, ":")[2]
+		if toMsg == "" {
+			user.sendMsg("empty message!!!")
+			return
+		}
+
+		//发给对面用户
+		toUser.sendMsg(toUser.name + " tell u: " + toMsg)
+
 	} else {
 
 		//普通消息 直接群发
@@ -121,9 +146,9 @@ func (user *User) handleMsg(msg string) {
 func (user *User) offline() {
 
 	//从 在线用户列表onlineMap 移除
-	user.server.mapLock.Lock() //加锁？
+	user.server.mapLock.Lock()
 	delete(user.server.onlineMap, user.name)
-	user.server.mapLock.Unlock() //释放锁？
+	user.server.mapLock.Unlock()
 
 	//广播 用户下线消息
 	user.server.broadcast(user, "i'm offline!!!")
