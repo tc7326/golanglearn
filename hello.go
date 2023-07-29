@@ -17,17 +17,19 @@ func main() {
 	fmt.Println("Go Hello World!", dev) //自动换行
 	fmt.Print("Go Hello World!", dev)   //不换行
 
-	varShow()
-	varListShow()
-	constShow()
-	doubleReturnShow()
-	showSwap()
+	//varShow()
+	//varListShow()
+	//constShow()
+	//doubleReturnShow()
+	//showSwap()
+	//
+	//hello2()
+	//
+	//hello3()
+	//
+	//hello4()
 
-	hello2()
-
-	hello3()
-
-	hello4()
+	round10000()
 }
 
 // 声明变量 不赋值
@@ -101,4 +103,17 @@ func showSwap() {
 	swap(&a, &b)
 	fmt.Println("地址：", "a是", &a, "\t", "b是", &b)
 	fmt.Println("值：", "a是", a, "\t", "b是", b)
+}
+
+func goFunc(i int) {
+	fmt.Println("goroutine ", i, " ...")
+}
+
+func round10000() {
+	//time.Sleep(time.Second)
+	for i := 0; i < 10000; i++ {
+		go goFunc(i) //开启一个并发协程
+	}
+	//time.Sleep(time.Microsecond * 1)
+	fmt.Println("goroutine  end")
 }
