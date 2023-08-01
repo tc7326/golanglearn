@@ -193,7 +193,58 @@ go-kit, micro, monzo/typhon, bilibili 等
 
 ## 1、hello world
 
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello Go")
+}
+```
+
+执行
+
+```shell
+go run main.go
+```
+
 ## 2、变量
+
+### 1) 先声明 再赋值
+
+```go
+//先声明
+var str string
+var i int
+//再赋值
+str = "ddd"
+i = 188
+fmt.Print("我是 str: ", str,"我是 i: ",i)
+```
+
+### 2) 自动判断类型
+```go
+var b = false
+var i2 = 99
+fmt.Print("我是 b: ", b, "我是 i2: ", i2)
+```
+
+### 3) 省略var 直接 :=
+
+```go
+dev := "Go Developers"
+fmt.Println("Go Hello World! ", dev)
+```
+
+## 2.5、 多变量声明
+
+```go
+
+```
+
+
+
 
 ## 3、常量
 

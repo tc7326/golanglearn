@@ -13,9 +13,32 @@ func init() {
 
 // 主函数
 func main() {
+	//先声明
+	var str string
+	var i int
+	//再赋值
+	str = "ddd"
+	i = 188
+	fmt.Print("我是 str: ", str, "我是 i: ", i)
+
+	//自动判断类型
+	var b = false
+	var i2 = 99
+	fmt.Print("我是 b: ", b, "我是 i2: ", i2)
+
+	//:=
 	dev := "Go Developers"
 	fmt.Println("Go Hello World!", dev) //自动换行
 	fmt.Print("Go Hello World!", dev)   //不换行
+
+	//多变量声明
+	var x, y int
+	//赋值
+	x = 10
+	y = 100
+	fmt.Print("坐标", x, ", ", y)
+
+	var ()
 
 	//varShow()
 	//varListShow()
