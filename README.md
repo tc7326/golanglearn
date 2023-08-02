@@ -211,6 +211,11 @@ go run main.go
 
 ## 2、变量
 
+获取变量类型 大写T
+```go
+fmt.Printt("指定类型 %T", v)
+```
+
 ### 1) 先声明 再赋值
 
 ```go
@@ -232,21 +237,146 @@ fmt.Print("我是 b: ", b, "我是 i2: ", i2)
 
 ### 3) 省略var 直接 :=
 
+直接 := 的形式 不适用于 全局变量的声明 只能在函数中使用。
+
 ```go
 dev := "Go Developers"
 fmt.Println("Go Hello World! ", dev)
 ```
 
-## 2.5、 多变量声明
+### 4) 多变量声明
+
+```go
+//同时声明两个变量 x 和 y
+var x, y int
+//赋值
+x = 10
+y = 99
+fmt.Print("坐标", x, ", ", y)
+
+
+//这种分解的写法,一般用于声明全局变量
+var (
+    top1 int
+    topb bool
+)
+top1 = 10
+topb = true
+fmt.Print("全局变量", top1,topb)
+
+
+//同时声明并赋值 指定类型
+var p1, p2, p3 int = 1, 2, 3
+fmt.Print("指定类型 ", p1, p2, p3)
+
+
+//同时声明并赋值 不指定类型
+var pi, pb, ps = 1, false, "dd"
+fmt.Print("不指定类型 ", pi, pb, ps)
+
+//不带声明格式的只能在函数体内实现 无法定义为全局变量
+g, h := 123, "ddd"
+fmt.Println(g, h)
+
+
+//实际上7的赋值被废弃，变量 _  不具备读特性
+_, value := 7, 5
+//fmt.Println(_) //_变量的是读不出来的
+fmt.Println(value) //5
+```
+
+## 3、常量
+
+### 常量的定义
+
+常量是一个简单值的标识符，在程序运行时，不会被修改的量
+
+常量中的数据类型只可以是布尔型、数字型（整数型、浮点型和复数）和字符串型。
+
+```go
+//隐式类型定义
+const bookTitle = "百科全书"
+//显式类型定义
+const price float32 = 6.66
+fmt.Println(bookTitle, "的价格是", price)
+```
+
+常量可以用len(), cap(), unsafe.Sizeof()常量计算表达式的值。
+
+常量表达式中，函数必须是内置函数，否则编译不过：
+
+```go
+const (
+    a = "abc"
+    b = len(a)
+    c = unsafe.Sizeof(a)
+)
+println(a, b, c)// abc,3,16
+```
+字符串类型在 go 里是个结构 包含指向底层数组的指针和长度 
+
+这两部分每部分都是 8 个字节 所以字符串类型大小为 16 个字节
+
+### 枚举
+
+常量还可以用作枚举
+
+```go
+const (
+    GIRL = 0
+    BOY  = 1
+)
+fmt.Println(BOY, GIRL)
+```
+
+#### iota
+
+可以理解为自增常量
 
 ```go
 
+const (
+    l0 = iota //0
+    l1 //1
+    l2 //2
+    l3 //3
+)
+```
+iota 默认值是0 后面的 i1, i2, i3 不用赋值 系统会自动 +1
+
+iota 只能在const里用 不能和var使用
+
+## 4、函数
+
+### 单返回值函数
+
+该函数 包含2个形参 x和y 有1个返回值
+```go
+func plus(x int, y int) int {
+    return x + y
+}
+```
+
+### 多返回值函数
+
+该函数 包含2个形参 x和y 有2个返回值
+
+```go
+func swap(x, y string) (string, string) {
+    return y, x
+}
 ```
 
 
 
 
-## 3、常量
+
+
+
+
+
+
+
 
 
 

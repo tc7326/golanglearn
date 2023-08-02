@@ -4,6 +4,7 @@ package main //包名
 import (
 	"fmt" //导入依赖
 	"strconv"
+	"unsafe"
 )
 
 // 初始化函数
@@ -13,6 +14,34 @@ func init() {
 
 // 主函数
 func main() {
+
+	//varShow()
+	//varListShow()
+	//constShow()
+	//doubleReturnShow()
+	//showSwap()
+	//
+	//hello2()
+	//
+	//hello3()
+	//
+	//hello4()
+
+	//round10000()
+}
+
+// 声明变量 不赋值
+var empty string
+
+// 定义变量 并赋值
+var name = "wuta"
+
+func varShow() {
+
+	//定义变量 省略 var 只能定义到方法里
+	novar := 998
+	fmt.Println(empty, name, novar)
+
 	//先声明
 	var str string
 	var i int
@@ -35,38 +64,34 @@ func main() {
 	var x, y int
 	//赋值
 	x = 10
-	y = 100
+	y = 99
 	fmt.Print("坐标", x, ", ", y)
 
-	var ()
+	//这种分解的写法,一般用于声明全局变量
+	var (
+		top1 int
+		topb bool
+	)
+	top1 = 10
+	topb = true
+	fmt.Print("全局变量", top1, topb)
 
-	//varShow()
-	//varListShow()
-	//constShow()
-	//doubleReturnShow()
-	//showSwap()
-	//
-	//hello2()
-	//
-	//hello3()
-	//
-	//hello4()
+	var p1, p2, p3 int = 1, 2, 3
+	fmt.Print("指定类型 ", p1, p2, p3)
 
-	round10000()
-}
+	var pi, pb, ps = 1, false, "dd"
+	fmt.Print("不指定类型 ", pi, pb, ps)
 
-// 声明变量 不赋值
-var empty string
+	//不带声明格式的只能在函数体内实现
+	g, h := 123, "ddd"
+	fmt.Println(g, h)
 
-// 定义变量 并赋值
-var name = "wuta"
+	//实际上7的赋值被废弃，变量 _  不具备读特性
+	_, value := 7, 5
+	//fmt.Println(_) //_变量的是读不出来的
+	fmt.Println(value) //5
 
-func varShow() {
-
-	//定义变量 省略 var 只能定义到方法里
-	novar := 998
-
-	fmt.Println(empty, name, novar)
+	fmt.Printf("%T", value) //5
 
 }
 
@@ -93,6 +118,30 @@ const (
 func constShow() {
 	fmt.Println(bookTitle, "的价格是", price)
 	fmt.Println(BOY, GIRL)
+
+	const (
+		a = "abc"
+		b = len(a)
+		c = unsafe.Sizeof(a)
+	)
+	println(a, b, c)
+
+	//
+	const (
+		l0 = iota
+		l1
+		l2
+		l3
+	)
+
+}
+
+func plus(x int, y int) int {
+	return x + y
+}
+
+func swap(x, y string) (string, string) {
+	return y, x
 }
 
 // 函数返回多个值
