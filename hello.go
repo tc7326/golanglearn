@@ -140,8 +140,19 @@ func plus(x int, y int) int {
 	return x + y
 }
 
-func swap(x, y string) (string, string) {
+func xySwap(x, y string) (string, string) {
 	return y, x
+}
+
+func replace(x, y string) (r1 string, r2 string) {
+	r1 = x
+	r2 = y
+	return
+}
+func replace2(x, y string) (r1, r2 string) {
+	r1 = x
+	r2 = y
+	return
 }
 
 // 函数返回多个值
@@ -188,4 +199,16 @@ func round10000() {
 	}
 	//time.Sleep(time.Microsecond * 1)
 	fmt.Println("goroutine  end")
+}
+
+// 修改值
+func change(p *int) {
+	*p = 50
+}
+
+// 验证
+func test() {
+	i = 100    //定义一个变量i值为100
+	change(&i) //传递i的内存地址
+	fmt.Println("修改后: ", i)
 }
