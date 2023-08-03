@@ -367,13 +367,120 @@ func swap(x, y string) (string, string) {
 }
 ```
 
+### 有名称的返回值函数
 
+```go
+func replace(x, y string) (r1 string, r2 string) {
+    r1 = x
+    r2 = y
+    return 
+}
+//相同返回值类型可以省略
+func replace(x, y string) (r1, r2 string) {
+    r1 = x
+    r2 = y
+    return
+}
+```
 
+### init 函数
 
+init 函数 每个 package 都可以声明
 
+用于初始化数据 和 配置文件
 
+### main 函数
 
+main 函数 只能在 main package 中声明
 
+程序主入口 只能有一个main
+
+### 执行顺序
+
+程序的初始化和执行都起始于main包
+
+先执行所有包的 init 函数，再执行 main 函数。
+
+这里放一张大佬的图
+
+![golang_function.png](img/golang_function.png)
+
+### public 和 private
+
+函数名 大写开头 就是 public 只要导入package 就能调用，
+
+小写开头就是 private 只能在自己的 package 中调用。 
+
+### import 的 匿名 和 别名
+
+#### 匿名
+```go
+import _ "package1"
+```
+会执行 这个package 的 init 函数
+
+但是无法调用 该package 里的 其他函数。
+
+#### 别名
+
+```go
+import pkg "package1"
+```
+
+给包起别名 可以通过别名 . 出方法
+
+```go
+pkg.fun()
+```
+
+### 函数参数传递
+
+#### 值传递
+
+值拷贝 开辟新的内存地址
+
+```go
+// 修改值
+func change(p int) {
+    p = 50
+}
+
+// 验证
+func test() {
+    i = 100 //定义一个变量i值为100
+    change(i) //值传递
+    fmt.Println("修改后: ", i)//100
+}
+```
+最后输出是 100
+
+因为当前是 值传递 外边的i 和 里面的p 是不同的内存地址。
+
+里边的p 再怎么修改 不影响外边i的值
+
+#### 引用(指针)传递
+
+```go
+// 修改值
+func change(p *int) {
+    *p = 50
+}
+
+// 验证
+func test() {
+    i = 100    //定义一个变量i值为100
+    change(&i) //传递i的内存地址
+    fmt.Println("修改后: ", i)//50
+}
+```
+
+可以看到 输出了50
+
+因为 p是一个int类型的指针 它指向了 i 的内存地址
+所以 i 和 p 使用的是同一个内存地址
+修改了 p 就 等于 修改了 i
+
+## 4、defer
 
 
 
