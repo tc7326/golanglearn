@@ -480,7 +480,77 @@ func test() {
 所以 i 和 p 使用的是同一个内存地址
 修改了 p 就 等于 修改了 i
 
+**指针经典案例**
+
+```go
+func swap(x *int, y *int) {
+   var temp int
+   temp = *x    // 保存 x 地址上的值
+   *x = *y      // 将 y 值赋给 x
+   *y = temp    // 将 temp 值赋给 y
+}
+
+func main() {
+    var a int = 100
+    var b int= 200
+	
+    fmt.Printf("交换前，a 的值 : %d\n", a )
+    fmt.Printf("交换前，b 的值 : %d\n", b )
+	
+    // &a 指向 a 指针，a 变量的地址
+    // &b 指向 b 指针，b 变量的地址
+    swap(&a, &b)
+	
+    fmt.Printf("交换后，a 的值 : %d\n", a )
+    fmt.Printf("交换后，b 的值 : %d\n", b )
+}
+```
+
 ## 4、defer
+
+### defer
+
+defer语句被用于预定对一个函数的调用。可以把这类被defer语句调用的函数称为延迟函数。
+
+defer作用：
+- 释放占用的资源
+- 捕捉处理异常
+- 输出日志
+
+如果一个函数中有多个defer语句，它们会以LIFO（后进先出）的顺序执行。
+```go
+func Demo(){
+	
+    defer fmt.Println("1")
+    defer fmt.Println("2")
+
+    fmt.Println("a")
+	
+    defer fmt.Println("3")
+    defer fmt.Println("4")
+	
+    fmt.Println("b")
+    fmt.Println("c")
+}
+```
+输出结果 a,b,c,4,3,2,1
+
+可以理解为堆栈。 程序先正常执行所有 非defer函数，最后再执行 defer的函数。
+
+### defer和return的执行顺序
+
+总结：先return 后defer
+
+defer 在当前函数的生命周期结束之后 才执行。
+
+### recover错误拦截
+
+
+## 6、slice 和 map
+
+
+
+
 
 
 
