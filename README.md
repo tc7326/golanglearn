@@ -506,7 +506,7 @@ func main() {
 }
 ```
 
-## 4、defer
+## 5、defer
 
 ### defer
 
@@ -543,17 +543,142 @@ func Demo(){
 
 defer 在当前函数的生命周期结束之后 才执行。
 
-### recover错误拦截
+### recover 错误拦截
+
+运行时panic异常一旦被引发就会导致程序崩溃。
+
+Go语言提供了专用于“拦截”运行时panic的内建函数“recover”。它可以是当前的程序从运行时panic的状态中恢复并重新获得流程控制权。
+
+**注意**：recover 只有在 defer 调用的函数中有效。
+
+```go
+package main
+
+import "fmt"
+
+func Demo(i int) {
+    //定义10个元素的数组
+    var arr [10]int
+    //错误拦截要在产生错误前设置
+    defer func() {
+    	//设置recover拦截错误信息
+    	err := recover()
+    	//产生panic异常  打印错误信息
+    	if err != nil {
+            fmt.Println(err)
+    	}
+    }()
+    //根据函数参数为数组元素赋值
+    //如果i的值超过数组下标 会报错误：数组下标越界
+    arr[i] = 10
+}
+
+func main() {
+    Demo(10)
+    //产生错误后 程序继续
+    fmt.Println("程序继续执行...")
+}
+```
+
+## 6、slice
+
+### 数组
+
+```go
+var slice0 [10]int
+
+//直接 :=
+slice1 := [3]int{1, 2, 3}
+```
+
+视频总结：固定长度的数组不好用，数组中间是值传递，初始赋值后，后边再修改也不会发生变化。开发很不方便，所以我们要使用 **切片**(动态数组)
+
+### slice 切片
+
+**Go中 切片 是对 数组 的 抽象**
+
+### 定义切片
+
+声明一个未指定大小的数组来定义切片
+
+### 直接:=
+
+```go
+//直接 := 的形式 初始化 并给了默认值
+slice1 := []int{1, 2, 3}
+```
+
+### 先声明再赋值
+```go
+//先声明 这个时候开没开辟空间
+var slice4 []string
+//赋值 这个时候 切片才初始化
+slice4 = []string{"aaa", "b"}
+```
+
+### 使用 make()
+
+```go
+//声明带长度的切片 长度会自动扩容
+var slice2 []string = make([]string, 99)
+
+//直接 :=
+slice3 := make([]string)
+```
+
+### 切片的遍历
+
+```go
+//定义
+slice4 := []int{0, 12, 23, 34}
+//遍历
+for i, val := range slice4 {
+    fmt.Println("第 ", i, " 个值是: ", val)
+}
+```
+
+### 切片容量的追加
+
+**append()** 追加
+
+**len()** 实际长度
+
+**cap()** 开辟的内存地址的长度
+
+```go
+slice5 := []string{"a", "bb"}
+//给切片新增一个值
+slice5 := append(slice5, "ddd")
+
+fmt.Println("len: ", len(slice5), " cap: ", cap(slice5))
+```
+
+### 切片的截取
+
+```go
+slice7 := []string{"a", "b", "c", "d", "e", "f", "g"}
+//从下标 2 开始 到 下标 5
+slice8 := slice7[2:5] //c,d,e
+fmt.Println("截取: ", slice8)
+```
+
+简写
+
+```go
+//前面不不写 表示从0开始
+slice7[:5] //0:5
+
+//后边不屑 表示到结束
+slice7[5:] //5:len(slice7)
+```
+
+截取的值 和 源值 引用的同一个内存地址
+
+若修改截取后的值，源值也会变更。
+
+### 切片 copy
 
 
-## 6、slice 和 map
 
 
-
-
-
-
-
-
-
-
+## 6.5 map

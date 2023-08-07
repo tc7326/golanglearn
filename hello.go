@@ -28,6 +28,15 @@ func main() {
 	//hello4()
 
 	//round10000()
+
+	//模拟的错误方法
+	//recoverTest(10)
+	//产生错误后 程序还能继续
+	//fmt.Println("程序继续执行...")
+
+	//slice测试
+	sliceTest()
+
 }
 
 // 声明变量 不赋值
@@ -211,4 +220,59 @@ func test() {
 	i = 100    //定义一个变量i值为100
 	change(&i) //传递i的内存地址
 	fmt.Println("修改后: ", i)
+}
+
+func recoverTest(i int) {
+
+	//定义10个元素的数组
+	var arr [10]int
+
+	//错误拦截要在产生错误前设置
+	defer func() {
+		//设置拦截错误信息
+		err := recover()
+		//产生panic异常 打印错误信息
+		if err != nil {
+			fmt.Println(err)
+		}
+
+	}()
+
+	//根据函数参数为数组元素赋值
+	//如果i的值超过数组下标 会报错误：数组下标越界
+	arr[i] = 10
+}
+
+func sliceTest() {
+
+	var slice4 []string
+	slice4 = []string{"aaa", "b"}
+
+	//slice4 := []int{1, 2, 3}
+
+	for i, val := range slice4 {
+		fmt.Println("第 ", i, " 个值是: ", val)
+	}
+
+	//追加
+	slice5 := []string{"a", "bb"}
+	//给切片新增一个值
+	slice6 := append(slice5, "ddd")
+
+	for i, val := range slice5 {
+		fmt.Println("第 ", i, " 个值是: ", val)
+	}
+
+	for i, val := range slice6 {
+		fmt.Println("第 ", i, " 个值是: ", val)
+	}
+
+	fmt.Println("len: ", len(slice6), " cap: ", cap(slice6))
+
+	//截取
+	slice7 := []string{"a", "b", "c", "d", "e", "f", "g"}
+	//从下标 2 开始 到 下标 5
+	slice8 := slice7[2:5] //c,d,e
+	fmt.Println("截取: ", slice8)
+
 }
