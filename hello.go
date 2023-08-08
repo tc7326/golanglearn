@@ -35,7 +35,10 @@ func main() {
 	//fmt.Println("程序继续执行...")
 
 	//slice测试
-	sliceTest()
+	//sliceTest()
+
+	//map测试
+	mapTest()
 
 }
 
@@ -274,5 +277,42 @@ func sliceTest() {
 	//从下标 2 开始 到 下标 5
 	slice8 := slice7[2:5] //c,d,e
 	fmt.Println("截取: ", slice8)
+
+	//copy
+	n1 := []int{1, 2, 3}
+	var n2 = make([]int, 5)
+	copy(n2, n1)
+	fmt.Println("拷贝: ", n2)
+
+}
+
+func mapTest() {
+
+	//先声明map类型
+	var map0 map[string]int
+	//再开辟空间
+	map0 = make(map[string]int, 5)
+	map0["dd"] = 1
+	map0["a"] = 2
+	fmt.Println("map0: ", map0)
+
+	//直接开辟
+	map1 := make(map[int]string)
+	map1[1] = "wang"
+	map1[9] = "kk"
+	fmt.Println("map1: ", map1)
+
+	//简写
+	map2 := map[string]string{
+		"key": "value",
+		"ddd": "bili",
+		"bi":  "滴滴",
+	}
+	fmt.Println("map2: ", map2)
+
+	//遍历 和切片类似
+	for i, val := range map2 {
+		fmt.Println("map2: ", i, "-", val)
+	}
 
 }

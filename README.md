@@ -610,7 +610,7 @@ slice1 := []int{1, 2, 3}
 
 ### 先声明再赋值
 ```go
-//先声明 这个时候开没开辟空间
+//先声明 这个时候开没开辟空间 所以是空切片 nil
 var slice4 []string
 //赋值 这个时候 切片才初始化
 slice4 = []string{"aaa", "b"}
@@ -619,8 +619,11 @@ slice4 = []string{"aaa", "b"}
 ### 使用 make()
 
 ```go
-//声明带长度的切片 长度会自动扩容
+//声明长度为99的切片 长度会自动扩容
 var slice2 []string = make([]string, 99)
+
+//声明长度为45的切片 每次自动扩容的长度为5
+var slice2 []string = make([]string, 45, 5)
 
 //直接 :=
 slice3 := make([]string)
@@ -657,7 +660,7 @@ fmt.Println("len: ", len(slice5), " cap: ", cap(slice5))
 
 ```go
 slice7 := []string{"a", "b", "c", "d", "e", "f", "g"}
-//从下标 2 开始 到 下标 5
+//从索引 2 开始， 到 索引 5 结束（是索引到5 不包含切片的第五个元素）
 slice8 := slice7[2:5] //c,d,e
 fmt.Println("截取: ", slice8)
 ```
@@ -665,10 +668,10 @@ fmt.Println("截取: ", slice8)
 简写
 
 ```go
-//前面不不写 表示从0开始
+//前面不写 表示从0开始
 slice7[:5] //0:5
 
-//后边不屑 表示到结束
+//后边不写 表示到结束
 slice7[5:] //5:len(slice7)
 ```
 
@@ -678,7 +681,76 @@ slice7[5:] //5:len(slice7)
 
 ### 切片 copy
 
+```go
+//声明n1 包含3个元素
+n1 := []int{1, 2, 3}
 
+//声明n2 开辟了5个空间
+var n2 = make([]int, 5)
 
+//拷贝n1的内容 到n2 值拷贝
+copy(n2, n1)
+
+fmt.Println("拷贝: ", n2)//1,2,3,0,0
+```
 
 ## 6.5 map
+
+### 声明map
+
+```go
+//先声明map类型
+var map0 map[string]int
+//再开辟空间
+map0 = make(map[string]int, 5)
+fmt.Println("map: ", map0)
+```
+
+```go
+//直接开辟
+map1 := make(map[int]string)
+map1[1] = "wang"
+map1[9] = "kk"
+fmt.Println("map1: ", map1)
+```
+
+```go
+//简写
+map2 := map[string]string{
+    "key": "value",
+    "ddd": "bili",
+    "bi":  "滴滴",
+}
+```
+
+### 新增和修改元素
+```go
+//直接改就行
+maps[key] = value
+```
+
+### 删除元素 delete
+```go
+//需要使用delete关键字
+delete(maps, key)
+```
+
+### 遍历map
+
+```go
+//遍历 和切片类似
+for i, val := range map2 {
+    fmt.Println("map2: ", i, " - ", val)
+}
+```
+
+
+## 7、面向对象
+
+
+
+
+
+
+
+
